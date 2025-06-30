@@ -81,7 +81,7 @@ services:
       devops.company.name: azureDevops
       smtp.host: "blade13.euronic.fi"
       smtp.email: "admin@devaten.com"
-      smtp.password: "47eyRnNFv69caaG"
+      smtp.password: 47eyRnNFv69caaG
       smtp.port: 465
       stoprecording.explainjson: disabled
       stoprecording.jira: disabled
