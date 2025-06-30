@@ -87,7 +87,7 @@ services:
       stoprecording.jira: disabled
       stoprecording.report: enable
       stoprecording.recordingmail: whenFailure
-      TZ: EET # Replace [YOUR_LOCAL_TIMEZONE] with your actual local timezone (e.g., "UTC", "America/New_York")
+      TZ: "EET" # Replace [YOUR_LOCAL_TIMEZONE] with your actual local timezone (e.g., "UTC", "America/New_York")
       CERTS_BASE_PATH: /app/certs  # Environment variable for certs path
       KEYSTORE_PASSWORD: Salasana1234!  # Secure Keystore password
     depends_on: 
