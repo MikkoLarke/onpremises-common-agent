@@ -85,9 +85,9 @@ services:
       TZ: "EET" # Replace [YOUR_LOCAL_TIMEZONE] with your actual local timezone (e.g., "UTC", "America/New_York")
       CERTS_BASE_PATH: /app/certs  # Environment variable for certs path
       KEYSTORE_PASSWORD: Salasana1234!  # Secure Keystore password
-      smtp.host: "blade13.euronic.fi"
-      smtp.email: "admin@devaten.com"
-      smtp.password: "47eyRnNFv69caaG"
+      smtp.host: ""
+      smtp.email: ""
+      smtp.password: ""
      
     depends_on: 
       mysqldb: 
