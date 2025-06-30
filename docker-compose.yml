@@ -4,7 +4,6 @@ networks:
     name: devaten-dashboard-common-agent
     
 services:
-
   devaten-activemq:
     image: rmohr/activemq:5.15.9
     container_name: devaten-activemq
@@ -59,7 +58,6 @@ services:
       ollama.base-url: http://ollama-deepseek-coder:11434
       ollama.model: deepseek-coder:6.7b  # or deepseek-coder 
       OLLAMA_CHAT_PATH: /api/generate  # Use /api/chat for deepseek-coder
-
       # --- OPENAI Config ---      
       openai.apiKey: Enter-your-openai-key      
       # for opensource url must be like this 'https://api.openai.com/v1/chat/completions' if your open-ai on azure then
@@ -79,9 +77,6 @@ services:
       azure.devops.tickettype: task
       azure.devops.pat: Enter-your-token-for-api-calls
       devops.company.name: azureDevops
-      smtp.host: "blade13.euronic.fi"
-      smtp.email: "admin@devaten.com"
-      smtp.password: "47eyRnNFv69caaG"
       smtp.port: 465
       stoprecording.explainjson: disabled
       stoprecording.jira: disabled
@@ -90,6 +85,10 @@ services:
       TZ: "EET" # Replace [YOUR_LOCAL_TIMEZONE] with your actual local timezone (e.g., "UTC", "America/New_York")
       CERTS_BASE_PATH: /app/certs  # Environment variable for certs path
       KEYSTORE_PASSWORD: Salasana1234!  # Secure Keystore password
+      smtp.host: "blade13.euronic.fi"
+      smtp.email: "admin@devaten.com"
+      smtp.password: "47eyRnNFv69caaG"
+     
     depends_on: 
       mysqldb: 
         condition: service_healthy
