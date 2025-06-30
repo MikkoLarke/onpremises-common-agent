@@ -9,8 +9,6 @@ services:
     image: rmohr/activemq:5.15.9
     container_name: devaten-activemq
     restart: unless-stopped
-    # activemq username is devaten .you can find activemq password in onpremises-common-agent\Configurations\activemq\ACTIVEMQ_CONF\conf\jetty-realm.propeties file.
-    # if you want to change password you can go above file location change it before run docker-compose.
     ports:
       - "8161:8161"
       - "61616:61616"
@@ -18,6 +16,7 @@ services:
       - devaten-dashboard-common-agent
     volumes:
       - ./Configurations/activemq/ACTIVEMQ_CONF/conf:/opt/activemq/conf:rw
+
   mysqldb:
     image: devaten/mysql-8.3-custom:latest
     container_name: mysqldb
@@ -28,9 +27,7 @@ services:
     ports:
       - 0.0.0.0:3306:3306
     volumes:
-      # Files 
       - ./mysql/my.cnf:/etc/alternatives/my.cnf
-      # Dirs
       - ./mysql/datadir/:/var/lib/mysql:rw
       - "./mysql/dump.sql:/docker-entrypoint-initdb.d/dump.sql"
     command:
@@ -53,32 +50,23 @@ services:
       spring.datasource.password: devaten@123
       spring.flyway.user: root
       spring.flyway.password: devaten@123
-      # --- AI Provider Selection
-      aiProvider: DEEPSEEK  # Options: DEEPSEEK or OPENAI
-      # --- DEEPSEEK (Ollama) Config ---
+      aiProvider: DEEPSEEK
       ollama.base-url: http://ollama-deepseek-coder:11434
-      ollama.model: deepseek-coder:6.7b  # or deepseek-coder 
-      OLLAMA_CHAT_PATH: /api/generate  # Use /api/chat for deepseek-coder
-
-      # --- OPENAI Config ---      
-      openai.apiKey: Enter-your-openai-key      
-      # for opensource url must be like this 'https://api.openai.com/v1/chat/completions' if your open-ai on azure then
-      #your url like 'https://xxxxxxx.openai.azure.com/openai/deployments/Test/completions?api-version=2023-09-15-preview'
+      ollama.model: deepseek-coder:6.7b
+      OLLAMA_CHAT_PATH: /api/generate
+      openai.apiKey: Enter-your-openai-key
       openai.apiurl: Enter-open-ai-api-url
-      # give response model name as 'gpt-3.5-turbo' or 'gpt-4'.
       openai.responsemodel: Enter-open-ai-responsemodel
-      # if your open-ai is on azure server then put server name as 'azure' or if you use opensource then server name as 'openai'.
       openai.server: Enter-open-ai-server
       openai.timeintervalinseconds: 0
       scheduler.fixed-delay: 15000
       scheduler.data-cleaner: 700000
-      # cpu.collector types: OFF,AGENT,CLIENT_TABLE (devaten.system_health_metrics)
       scheduler.cpu.collertor-type: AGENT
       azure.devops.organization: Enter-your-organisation
       azure.devops.project: Enter-your-project
       azure.devops.tickettype: task
       azure.devops.pat: Enter-your-token-for-api-calls
-      devops.company.name: azureDevops
+      devops.company.name: azureDevOps
       smtp.host: "blade13.euronic.fi"
       smtp.email: "admin@devaten.com"
       smtp.password: "47eyRnNFv69caaG"
@@ -87,9 +75,9 @@ services:
       stoprecording.jira: disabled
       stoprecording.report: enable
       stoprecording.recordingmail: whenFailure
-      TZ: EET # Replace [YOUR_LOCAL_TIMEZONE] with your actual local timezone (e.g., "UTC", "America/New_York")
-      CERTS_BASE_PATH: /app/certs  # Environment variable for certs path
-      KEYSTORE_PASSWORD: Salasana1234!  # Secure Keystore password
+      TZ: EET
+      CERTS_BASE_PATH: /app/certs
+      KEYSTORE_PASSWORD: Salasana1234!
     depends_on: 
       mysqldb: 
         condition: service_healthy
@@ -98,8 +86,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /app/logs:/app/logs # Replace log foleder what you like to use
-      - shared-certs:/app/certs  # Mounts volume to /app/certs 
+      - /app/logs:/app/logs
+      - shared-certs:/app/certs
     healthcheck:
       test: curl --fail http://localhost:8081 || exit 1
       interval: 60s
@@ -118,9 +106,9 @@ services:
       spring.datasource.password: devaten@123
       spring.flyway.user: root
       spring.flyway.password: devaten@123
-      TZ: "UTC" # Replace [YOUR_LOCAL_TIMEZONE] with your actual local timezone (e.g., "UTC", "America/New_York")
-      CERTS_BASE_PATH: /app/certs  # Environment variable for certs path
-      KEYSTORE_PASSWORD: Salasana1234!  # Secure Keystore password
+      TZ: "UTC"
+      CERTS_BASE_PATH: /app/certs
+      KEYSTORE_PASSWORD: Salasana1234!
     depends_on: 
       devaten-dashboard-container: 
         condition: service_healthy
@@ -131,28 +119,29 @@ services:
       - ./Configurations/.devaten/.data:/Configurations/.devaten/.data:rw
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - shared-certs:/app/certs  # Mounts same volume in this container
+      - shared-certs:/app/certs
     networks:
       - devaten-dashboard-common-agent   
       
-ollama:
-  image: ollama/ollama
-  container_name: ollama-deepseek-coder
-  restart: unless-stopped
-  ports:
-    - "11434:11434"
-  environment:
-    OLLAMA_MODELS: deepseek-coder:6.7b  # Or deepseek-coder
-  volumes:
-    - ollama-data:/root/.ollama
-  networks:
-    - devaten-dashboard-common-agent
-  healthcheck:
-    test: ["CMD", "curl", "-f", "http://localhost:11434"]
-    interval: 30s
-    timeout: 5s
-    retries: 3
+  ollama:
+    image: ollama/ollama
+    container_name: ollama-deepseek-coder
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    environment:
+      OLLAMA_MODELS: deepseek-coder:6.7b
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - devaten-dashboard-common-agent
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
 volumes:
   ollama-data:
   h2-data: {}
+  shared-certs:
