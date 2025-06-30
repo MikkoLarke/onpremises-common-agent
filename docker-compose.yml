@@ -79,8 +79,8 @@ services:
       azure.devops.tickettype: task
       azure.devops.pat: Enter-your-token-for-api-calls
       devops.company.name: azureDevops
-      smtp.host: "blade13.euronic.fi"
-      smtp.email: "admin@devaten.com"
+      smtp.host: blade13.euronic.fi
+      smtp.email: admin@devaten.com
       smtp.password: 47eyRnNFv69caaG
       smtp.port: 465
       stoprecording.explainjson: disabled
